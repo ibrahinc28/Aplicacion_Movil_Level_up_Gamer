@@ -16,4 +16,13 @@ class UsuariosGuardados {
 
         return texto
     }
+
+    fun revisarUsuarioExisteLogin(usuarioCheckCorreo : String, usuarioCheckClave : String) : Boolean {
+        for (x in usuarios) {
+            if (x.correo == usuarioCheckCorreo && x.clave == usuarioCheckClave) {
+                return true
+            }
+        }
+        return false
+    }
 }

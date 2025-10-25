@@ -27,10 +27,12 @@ import androidx.navigation.NavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.text.font.FontWeight
+import com.example.levelupgamermovil.repository.UsuariosGuardados
 
 @Composable
-fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel) {
+fun userLoginScreen(navController : NavController, viewModel: RegistroViewModel) {
     val estado by viewModel.estado.collectAsState()
+    val usuarios = UsuariosGuardados()
 
     Column(
         Modifier
@@ -38,22 +40,10 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
             .padding(16.dp),
         Arrangement.spacedBy(12.dp),
     ) {
-        Text(text = "Crear usuario", style = MaterialTheme.typography.headlineMedium,
+        Text(text = "Iniciar sesión", style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
 
-        OutlinedTextField(
-            value = estado.nombre,
-            onValueChange = viewModel::onNombreChange,
-            label = { Text("Nombre") },
-            isError = estado.errores.nombre != null,
-            supportingText = {
-                estado.errores.nombre?.let {
-                    Text(it, color = MaterialTheme.colorScheme.error)
-        }
-    },
-    modifier = Modifier.fillMaxWidth()
-    )
         OutlinedTextField(
             value = estado.correo,
             onValueChange = viewModel::onCorreoChange,
@@ -79,35 +69,16 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
             },
         modifier = Modifier.fillMaxWidth()
         )
-    OutlinedTextField(
-        value = estado.direccion,
-        onValueChange = viewModel::onDireccionChange,
-        label = { Text("Dirección") },
-        isError = estado.errores.direccion != null,
-        supportingText = {
-            estado.errores.direccion?.let {
-                Text(it, color = MaterialTheme.colorScheme.error)
-            }
-        },
-    modifier = Modifier.fillMaxWidth()
-)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = estado.aceptaTerminos,
-                onCheckedChange = viewModel::onAceptarTerminosChange
-            )
-            Spacer(Modifier.width(8.dp))
-            Text("Acepto los términos y condiciones")
-        }
+
         Button(
-onClick = {
-    if (viewModel.validarFormulario()) {
-        navController.navigate("ResumenScreen")
-    }
-},
+            onClick = {
+                if (usuarios.revisarUsuarioExisteLogin(estado.correo, estado.clave)) {
+                    navController.navigate("UserVerify")
+                }
+            },
 modifier = Modifier.fillMaxWidth()
 ) {
-    Text("Registrar")
+    Text("Iniciar sesión")
 }
         Button(
             onClick = {navController.popBackStack()},

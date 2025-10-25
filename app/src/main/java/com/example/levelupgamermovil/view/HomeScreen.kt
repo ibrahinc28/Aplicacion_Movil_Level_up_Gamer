@@ -57,19 +57,19 @@ fun homeScreen(navController : NavController) {
             )
             Button(onClick = {navController.navigate("UserSignupScreen")},
                 colors = ButtonDefaults.buttonColors(
-                    Color.Red,
+                    Color.Green,
                     Color.White
                 )
             ) {
                 Text("Registrar usuario")
             }
-            Button(onClick = {navController.navigate("UserSignupScreen")},
+            Button(onClick = {navController.navigate("UserLoginScreen")},
                 colors = ButtonDefaults.buttonColors(
                     Color.Red,
                     Color.White
                 )
             ) {
-                Text("Debugear lista")
+                Text("Probar login")
             }
         }
 
