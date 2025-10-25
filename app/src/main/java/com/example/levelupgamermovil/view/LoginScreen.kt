@@ -24,15 +24,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.text.font.FontWeight
 import com.example.levelupgamermovil.repository.UsuariosGuardados
+import com.example.levelupgamermovil.viewmodel.LoginViewModel
 
 @Composable
-fun userLoginScreen(navController : NavController, viewModel: RegistroViewModel) {
-    val estado by viewModel.estado.collectAsState()
-    val usuarios = UsuariosGuardados()
+fun LoginScreen(navController : NavController, viewModel: LoginViewModel) {
+    val estado2 by viewModel.estado.collectAsState()
+    val usuario = UsuariosGuardados()
 
     Column(
         Modifier
@@ -40,46 +40,45 @@ fun userLoginScreen(navController : NavController, viewModel: RegistroViewModel)
             .padding(16.dp),
         Arrangement.spacedBy(12.dp),
     ) {
-        Text(text = "Iniciar sesión", style = MaterialTheme.typography.headlineMedium,
+        Text(text = "Crear usuario", style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
 
         OutlinedTextField(
-            value = estado.correo,
+            value = estado2.correo,
             onValueChange = viewModel::onCorreoChange,
             label = { Text("Correo") },
-            isError = estado.errores.correo != null,
+            isError = estado2.errores.correo != null,
             supportingText = {
-            estado.errores.correo?.let {
-                Text(it, color = MaterialTheme.colorScheme.error)
-        }
-    },
-        modifier = Modifier.fillMaxWidth()
-)
-        OutlinedTextField(
-            value = estado.clave,
-            onValueChange = viewModel::onClaveChange,
-            label = { Text("Clave") },
-            visualTransformation = PasswordVisualTransformation(),
-            isError = estado.errores.clave != null,
-            supportingText = {
-                estado.errores.clave?.let {
+                estado2.errores.correo?.let {
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-        modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
-
-        Button(
-            onClick = {
-                if (usuarios.revisarUsuarioExisteLogin(estado.correo, estado.clave)) {
-                    navController.navigate("UserVerify")
+        OutlinedTextField(
+            value = estado2.clave,
+            onValueChange = viewModel::onClaveChange,
+            label = { Text("Clave") },
+            visualTransformation = PasswordVisualTransformation(),
+            isError = estado2.errores.clave != null,
+            supportingText = {
+                estado2.errores.clave?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-modifier = Modifier.fillMaxWidth()
-) {
-    Text("Iniciar sesión")
-}
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(
+            onClick = {
+                if (viewModel.validarFormulario()) {
+                    navController.navigate("HomeScreen")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Iniciar sesión")
+        }
         Button(
             onClick = {navController.popBackStack()},
             colors = ButtonDefaults.buttonColors(

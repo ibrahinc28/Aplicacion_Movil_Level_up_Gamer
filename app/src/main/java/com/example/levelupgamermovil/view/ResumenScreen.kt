@@ -28,10 +28,7 @@ fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel) {
         Text("Éxito", style = MaterialTheme.typography.headlineMedium)
         Text("El usuario se ha registrado de manera exitosa", style = MaterialTheme.typography.headlineSmall)
 
-        guardarUsuario.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.direccion, estado.clave, estado.aceptaTerminos))
-
-        Text("Los usuarios guardados actualmente son: ${guardarUsuario.listarUsuarios()}"
-        ) // Este texto es con proposito debug, quitar o comentar al finalizar esta seccion
+        guardarUsuario.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.clave, estado.direccion, estado.aceptaTerminos))
 
         Button(
             onClick = {navController.navigate("HomeScreen")},

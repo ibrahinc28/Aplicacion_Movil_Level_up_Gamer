@@ -16,11 +16,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
+import com.example.levelupgamermovil.view.LoginScreen
 import com.example.levelupgamermovil.view.ResumenScreen
-import com.example.levelupgamermovil.view.UserVerify
 import com.example.levelupgamermovil.view.homeScreen
-import com.example.levelupgamermovil.view.userLoginScreen
 import com.example.levelupgamermovil.view.userSignupScreen
+import com.example.levelupgamermovil.viewmodel.LoginViewModel
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 
 class MainActivity : ComponentActivity() {
@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             val regViewModel : RegistroViewModel = viewModel()
+            val loginViewModel : LoginViewModel = viewModel()
 
             NavHost(navController = navController, startDestination = "HomeScreen") {
                 composable("HomeScreen") {
@@ -46,14 +47,9 @@ class MainActivity : ComponentActivity() {
                         navController, regViewModel
                     )
                 }
-                composable("UserLoginScreen") {
-                    userLoginScreen(
-                        navController, regViewModel
-                    )
-                }
-                composable("UserVerify") {
-                    UserVerify(
-                        navController
+                composable("LoginScreen") {
+                    LoginScreen(
+                        navController, loginViewModel
                     )
                 }
             }
