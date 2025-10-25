@@ -1,5 +1,4 @@
 package com.example.carritoapp.model
-
 data class CarritoEstado (
     val items: List<ItemCarrito> = emptyList(),
     val subtotal: Double = 0.0,
