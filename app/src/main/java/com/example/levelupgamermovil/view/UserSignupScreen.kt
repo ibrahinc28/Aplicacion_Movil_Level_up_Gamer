@@ -25,6 +25,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
+import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel) {
@@ -34,8 +36,12 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
         Modifier
             .fillMaxSize()
             .padding(16.dp),
-        Arrangement.spacedBy(12.dp)
+        Arrangement.spacedBy(12.dp),
     ) {
+        Text(text = "Crear usuario",
+            fontWeight = FontWeight.Bold,
+        )
+
         OutlinedTextField(
             value = estado.nombre,
             onValueChange = viewModel::onNombreChange,
