@@ -1,5 +1,6 @@
 package com.example.carritoapp
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,7 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.carritoapp.ui.theme.CarritoAppTheme
 import com.example.carritoapp.view.CarritoScreen
@@ -18,6 +18,7 @@ import com.example.carritoapp.viewmodel.ThemeViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.carritoapp.model.AppDatabase
 import com.example.carritoapp.repository.CarritoRepository
 
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val context = LocalContext.current
+                    val activity = context as? Activity
 
                     val db = remember{
                         AppDatabase.getDataBase(context)
@@ -50,7 +52,8 @@ class MainActivity : ComponentActivity() {
 
                     CarritoAppContent(
                         viewModel = carritoViewModel,
-                        themeViewModel = themeViewModel
+                        themeViewModel = themeViewModel,
+                        onContinuarComprando = { activity?.finish()}
                     )
                 }
             }
@@ -60,11 +63,17 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CarritoAppContent(
-    viewModel: CarritoViewModel = viewModel(),
-    themeViewModel: ThemeViewModel
+    viewModel: CarritoViewModel,
+    themeViewModel: ThemeViewModel,
+    onContinuarComprando: () -> Unit
 ){
-    CarritoScreen(viewModel = viewModel, themeViewModel = themeViewModel)
+    CarritoScreen(
+        viewModel = viewModel,
+        themeViewModel = themeViewModel,
+        onContinuarComprando = onContinuarComprando
+    )
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -72,4 +81,3 @@ fun AppPreview(){
     CarritoAppTheme {
     }
 }
-

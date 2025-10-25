@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,12 +41,12 @@ import androidx.compose.ui.unit.dp
 import com.example.carritoapp.viewmodel.CarritoViewModel
 import com.example.carritoapp.model.ItemCarrito
 import com.example.carritoapp.viewmodel.ThemeViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarritoScreen(
     viewModel: CarritoViewModel,
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel,
+    onContinuarComprando: () -> Unit
 ) {
     val estado by viewModel.estado.collectAsState()
     val esOscuro by themeViewModel.esOscuro.collectAsState(initial = false)
@@ -124,7 +123,7 @@ fun CarritoScreen(
                             onDisminuir = { viewModel.disminuirCantidad(item.producto.codigo) },
                             onEliminar = { viewModel.eliminarItem(item.producto.codigo) }
                         )
-                        Divider()
+                        androidx.compose.material3.HorizontalDivider()
                     }
                 }
             }
@@ -149,7 +148,7 @@ fun CarritoScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Divider()
+                        androidx.compose.material3.HorizontalDivider()
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
@@ -189,7 +188,7 @@ fun CarritoScreen(
                 }
             }
             Button(
-                onClick = {/* Lógica de navegación a la pantalla de productos */ },
+                onClick = onContinuarComprando,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
                 modifier = Modifier.fillMaxWidth().height(48.dp)
             ) {
