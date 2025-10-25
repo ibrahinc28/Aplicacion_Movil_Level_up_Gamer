@@ -109,7 +109,7 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
     fun vaciarCarrito() {
         viewModelScope.launch {
             repository.vaciar()
-            _mensajeFrow.value = "El carrito ha sido vaciado."
+            _mensajeFrow.value = "El carrito se ha vaciado."
             _compraFinalizada.value = false
         }
     }
