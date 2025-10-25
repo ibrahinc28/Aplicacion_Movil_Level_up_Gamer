@@ -16,10 +16,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import androidx.navigation.compose.NavHost
+import com.example.levelupgamermovil.model.DatosUsuarioUIState
+import com.example.levelupgamermovil.repository.UsuariosGuardados
 
 @Composable
 fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel) {
     val estado by viewModel.estado.collectAsState()
+    val guardarUsuario = UsuariosGuardados()
+
     Column (Modifier.padding(16.dp)) {
         Text("Resúmen del registro", style = MaterialTheme.typography.headlineMedium)
         Text("Nombre: ${estado.nombre}")
@@ -27,6 +31,11 @@ fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel) {
         Text("Dirección: ${estado.direccion}")
         Text("Contraseña: ${"*".repeat(estado.clave.length)}")
         Text("¿Términos aceptados? ${if (estado.aceptaTerminos) "Aceptados" else "Declinados"}")
+
+        guardarUsuario.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.direccion, estado.clave, estado.aceptaTerminos))
+
+        Text("Los usuarios guardados actualmente son: ${guardarUsuario.listarUsuarios()}"
+        ) // Este texto es con proposito debug, quitar o comentar al finalizar esta seccion
 
         Button(
             onClick = {navController.popBackStack()},
