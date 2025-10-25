@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("ResumenScreen") {
                     ResumenScreen(
-                        regViewModel
+                        navController, regViewModel
                     )
                 }
             }

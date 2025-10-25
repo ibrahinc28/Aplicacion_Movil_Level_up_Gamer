@@ -94,6 +94,16 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
             Text("Acepto los términos y condiciones")
         }
         Button(
+onClick = {
+    if (viewModel.validarFormulario()) {
+        navController.navigate("ResumenScreen")
+    }
+},
+modifier = Modifier.fillMaxWidth()
+) {
+    Text("Registrar")
+}
+        Button(
             onClick = {navController.popBackStack()},
             colors = ButtonDefaults.buttonColors(
                 Color.Black,
@@ -103,15 +113,5 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
         {
             Text("Volver")
         }
-        Button(
-onClick = {
-    if (viewModel.validarFormulario()) {
-        navController.navigate("resumen")
-    }
-},
-modifier = Modifier.fillMaxWidth()
-) {
-    Text("Registrar")
-}
     }
 }
