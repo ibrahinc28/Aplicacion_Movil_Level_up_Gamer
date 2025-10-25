@@ -50,7 +50,6 @@ fun CarritoScreen(
 ) {
     val estado by viewModel.estado.collectAsState()
     val esOscuro by themeViewModel.esOscuro.collectAsState(initial = false)
-
     val topBarColor by animateColorAsState(
         targetValue = MaterialTheme.colorScheme.surface,
         animationSpec = tween(500), label = "TopBarColor"
