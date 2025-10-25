@@ -99,7 +99,6 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
             }
         }
     }
-
     fun eliminarItem(codigo: String) {
         viewModelScope.launch {
             repository.eliminarPorCodigo(codigo)
@@ -113,7 +112,6 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
             _compraFinalizada.value = false
         }
     }
-
     fun finalizarCompra() {
         if (ITEMS_FLOW.value.isEmpty()) {
             _mensajeFrow.value = "Tu carrito está vacío. Añade productos para continuar."
