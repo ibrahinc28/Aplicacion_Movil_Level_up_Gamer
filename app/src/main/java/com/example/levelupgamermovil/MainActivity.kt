@@ -19,8 +19,11 @@ import com.example.levelupgamermovil.viewmodel.LoginViewModel
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import com.example.levelupgamermovil.repository.UsuariosGuardados
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.example.levelupgamermovil.repository.CarritoRepository
 import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 import com.example.levelupgamermovil.viewmodel.ThemeViewModel
+import com.example.levelupgamermovil.model.AppDatabase
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +33,17 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberNavController()
             val loginViewModel: LoginViewModel = viewModels<LoginViewModel>().value
             val registroViewModel: RegistroViewModel = viewModels<RegistroViewModel>().value
-            val usuariosGuardados = UsuariosGuardados() // O la instancia adecuada según tu lógica
-            val carritoViewModel: CarritoViewModel = viewModels<CarritoViewModel>().value
+            val usuariosGuardados = UsuariosGuardados()
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java,
+                "levelupgamer-db"
+            ).build()
+
+            val carritoDao = db.carritoDao()
+            val repo = CarritoRepository(carritoDao)
+            val carritoViewModel: CarritoViewModel by viewModels { CarritoViewModel.Factory(repo) }
+
             val themeViewModel: ThemeViewModel = viewModels<ThemeViewModel>().value
 
             NavHost(
