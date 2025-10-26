@@ -2,8 +2,8 @@ package com.example.levelupgamermovil.repository
 
 import com.example.levelupgamermovil.model.DatosUsuarioUIState
 
-class UsuariosGuardados {
-    val usuarios = mutableSetOf<DatosUsuarioUIState>()
+class UsuariosGuardados() {
+    var usuarios = mutableSetOf<DatosUsuarioUIState>()
 
     fun agregarUsuario(usuarioNuevo : DatosUsuarioUIState) {
         usuarios.add(usuarioNuevo)

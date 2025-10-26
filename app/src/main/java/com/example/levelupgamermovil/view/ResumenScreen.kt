@@ -13,22 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
-import androidx.navigation.compose.NavHost
 import com.example.levelupgamermovil.model.DatosUsuarioUIState
 import com.example.levelupgamermovil.repository.UsuariosGuardados
 
 @Composable
-fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel) {
+fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel, usuarios: UsuariosGuardados) {
     val estado by viewModel.estado.collectAsState()
-    val guardarUsuario = UsuariosGuardados()
 
     Column (Modifier.padding(16.dp)) {
         Text("Éxito", style = MaterialTheme.typography.headlineMedium)
         Text("El usuario se ha registrado de manera exitosa", style = MaterialTheme.typography.headlineSmall)
 
-        guardarUsuario.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.clave, estado.direccion, estado.aceptaTerminos))
+        usuarios.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.clave, estado.direccion, estado.aceptaTerminos))
 
         Button(
             onClick = {navController.navigate("HomeScreen")},

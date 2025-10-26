@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.levelupgamermovil.repository.UsuariosGuardados
 import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
 import com.example.levelupgamermovil.view.LoginScreen
 import com.example.levelupgamermovil.view.ResumenScreen
@@ -44,12 +45,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("ResumenScreen") {
                     ResumenScreen(
-                        navController, regViewModel
+                        navController, regViewModel, UsuariosGuardados()
                     )
                 }
                 composable("LoginScreen") {
                     LoginScreen(
-                        navController, loginViewModel
+                        navController, loginViewModel, UsuariosGuardados()
                     )
                 }
             }

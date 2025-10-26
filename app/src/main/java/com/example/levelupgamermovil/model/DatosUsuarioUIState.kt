@@ -1,5 +1,4 @@
 package com.example.levelupgamermovil.model
-import com.example.levelupgamermovil.model.DatosUsuarioErrores
 
 data class DatosUsuarioUIState(
     val nombre : String = "",
