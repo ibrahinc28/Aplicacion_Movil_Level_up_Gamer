@@ -49,6 +49,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-rc02")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

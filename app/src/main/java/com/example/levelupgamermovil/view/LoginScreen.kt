@@ -64,7 +64,7 @@ fun LoginScreen(navController : NavController, viewModel: LoginViewModel, usuari
         Button(
             onClick = {
                 if (viewModel.validarFormulario()) {
-                    navController.navigate("HomeScreen")
+                    navController.navigate("PerfilScreen")
                 }
             },
             modifier = Modifier.fillMaxWidth()

@@ -20,9 +20,11 @@ import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
 import com.example.levelupgamermovil.view.LoginScreen
 import com.example.levelupgamermovil.view.ResumenScreen
 import com.example.levelupgamermovil.view.homeScreen
+import com.example.levelupgamermovil.view.screen.PerfilScreen
 import com.example.levelupgamermovil.view.userSignupScreen
 import com.example.levelupgamermovil.viewmodel.LoginViewModel
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
+import com.example.levelupgamermovil.viewmodel.PerfilViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +35,7 @@ class MainActivity : ComponentActivity() {
 
             val regViewModel : RegistroViewModel = viewModel()
             val loginViewModel : LoginViewModel = viewModel()
+            val camViewModel: PerfilViewModel = viewModel()
 
             NavHost(navController = navController, startDestination = "HomeScreen") {
                 composable("HomeScreen") {
@@ -51,6 +54,11 @@ class MainActivity : ComponentActivity() {
                 composable("LoginScreen") {
                     LoginScreen(
                         navController, loginViewModel, UsuariosGuardados()
+                    )
+                }
+                composable("PerfilScreen") {
+                    PerfilScreen(
+                        navController, camViewModel
                     )
                 }
             }

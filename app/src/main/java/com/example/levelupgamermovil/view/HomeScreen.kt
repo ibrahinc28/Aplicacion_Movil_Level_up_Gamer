@@ -69,6 +69,14 @@ fun homeScreen(navController : NavController) {
             ) {
                 Text("Probar login")
             }
+            Button(onClick = {navController.navigate("PerfilScreen")},
+                colors = ButtonDefaults.buttonColors(
+                    Color.Red,
+                    Color.White
+                )
+            ) {
+                Text("Camara")
+            }
         }
     }
 }
