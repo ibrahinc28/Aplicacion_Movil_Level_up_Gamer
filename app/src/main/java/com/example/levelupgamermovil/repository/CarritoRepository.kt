@@ -1,7 +1,6 @@
 package com.example.levelupgamermovil.repository
 
 import com.example.carritoapp.model.CarritoDao
-import com.example.carritoapp.model.CarritoItemEntity
 import com.example.levelupgamermovil.model.CarritoItemEntity
 import kotlinx.coroutines.flow.Flow
 
