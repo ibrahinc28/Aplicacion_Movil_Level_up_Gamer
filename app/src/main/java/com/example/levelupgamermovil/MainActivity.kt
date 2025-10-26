@@ -4,44 +4,35 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.levelupgamermovil.navigation.NavRoutes
+import com.example.levelupgamermovil.view.LoginScreen
+import com.example.levelupgamermovil.view.UserSignupScreen
+import com.example.levelupgamermovil.view.HomeScreen
+import com.example.levelupgamermovil.view.ProductListScreen
+import com.example.levelupgamermovil.view.CarritoScreen
+import com.example.levelupgamermovil.view.ResumenScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LevelUpGamerMovilTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            val navController = rememberNavController()
+
+            NavHost(
+                navController = navController,
+                startDestination = NavRoutes.LOGIN
+            ) {
+                composable(NavRoutes.LOGIN) { LoginScreen(navController) }
+                composable(NavRoutes.SIGNUP) { UserSignupScreen(navController) }
+                composable(NavRoutes.HOME) { HomeScreen(navController) }
+                composable(NavRoutes.PRODUCTOS) { ProductListScreen(navController) }
+                composable(NavRoutes.CARRITO) { CarritoScreen(navController) }
+                composable(NavRoutes.RESUMEN) { ResumenScreen(navController) }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LevelUpGamerMovilTheme {
-        Greeting("Android")
     }
 }
