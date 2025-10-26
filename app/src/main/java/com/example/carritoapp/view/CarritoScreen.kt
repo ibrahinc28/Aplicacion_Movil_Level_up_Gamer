@@ -118,9 +118,9 @@ fun CarritoScreen(
                     items(estado.items) { item ->
                         CarritoItemRow(
                             item = item,
-                            onAumentar = { viewModel.aumentarCantidad(item.producto.codigo) },
-                            onDisminuir = { viewModel.disminuirCantidad(item.producto.codigo) },
-                            onEliminar = { viewModel.eliminarItem(item.producto.codigo) }
+                            onAumentar = { viewModel.aumentarCantidad(item.codigoProducto) },
+                            onDisminuir = { viewModel.disminuirCantidad(item.codigoProducto) },
+                            onEliminar = { viewModel.eliminarItem(item.codigoProducto) }
                         )
                         androidx.compose.material3.HorizontalDivider()
                     }
@@ -212,7 +212,7 @@ fun CarritoItemRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(item.producto.nombre, style = MaterialTheme.typography.titleMedium)
+            Text(item.nombre, style = MaterialTheme.typography.titleMedium)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(onClick = onDisminuir, modifier = Modifier.size(32.dp)) { Text("-") }
                 Spacer(Modifier.width(8.dp))
@@ -223,7 +223,7 @@ fun CarritoItemRow(
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "${"%.2f".format(item.producto.precio * item.cantidad)} CLP",
+                "${"%.2f".format(item.precio * item.cantidad)} CLP",
                 fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.width(8.dp))

@@ -1,2 +1,5 @@
 package com.example.carritoapp.model
-data class ItemCarrito (val producto: Producto, var cantidad: Int)
+data class ItemCarrito (val codigoProducto: String,
+                        val nombre: String,
+                        val precio: Double,
+                        var cantidad: Int)

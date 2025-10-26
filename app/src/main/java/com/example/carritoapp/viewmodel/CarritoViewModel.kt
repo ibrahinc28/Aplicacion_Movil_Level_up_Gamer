@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.carritoapp.model.CarritoEstado
 import com.example.carritoapp.model.CarritoItemEntity
 import com.example.carritoapp.model.ItemCarrito
-import com.example.carritoapp.model.Producto
 import com.example.carritoapp.repository.CarritoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,6 +20,7 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
 
     private val _mensajeFrow = MutableStateFlow<String?>(null)
     private val _compraFinalizada = MutableStateFlow(false)
+    private val COSTO_ENVIO = 5000.0
 
     private val ITEMS_FLOW = repository.obtenerItemsCarrito()
         .stateIn(
@@ -30,14 +30,16 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
         )
     val estado: StateFlow<CarritoEstado> = ITEMS_FLOW.combine(_mensajeFrow) { itemsEntity, mensaje -> itemsEntity to mensaje }
         .combine(_compraFinalizada){ (itemsEntity, mensaje), finalizada ->
-        val items = itemsEntity.map {
+        val items = itemsEntity.map { entity: CarritoItemEntity ->
             ItemCarrito(
-                producto = Producto(it.codigoProducto, it.nombre, it.precio),
-                cantidad = it.cantidad
+                codigoProducto = entity.codigoProducto,
+                nombre = entity.nombre,
+                precio = entity.precio,
+                cantidad = entity.cantidad
             )
         }
 
-        val nuevoSubtotal = items.sumOf { it.producto.precio * it.cantidad }
+        val nuevoSubtotal = items.sumOf { it.precio * it.cantidad }
         val nuevoCostoEnvio = if (items.isNotEmpty()) 5000.0 else 0.0
         val nuevoTotal = nuevoSubtotal + nuevoCostoEnvio
         val nuevoTotalArticulos = items.sumOf { it.cantidad }
@@ -58,24 +60,24 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
 
     )
 
-    fun agregarItem(producto: Producto) {
+    fun agregarItem(codigoProducto: String, nombre: String, precio: Double) {
         viewModelScope.launch {
             _mensajeFrow.value = null
-            val itemExistente = ITEMS_FLOW.value.find { it.codigoProducto == producto.codigo }
+            val itemExistente = ITEMS_FLOW.value.find { it.codigoProducto == codigoProducto }
 
             val nuevoItemEntity = if (itemExistente != null) {
                 itemExistente.copy(cantidad = itemExistente.cantidad + 1)
             } else {
                 CarritoItemEntity(
-                    codigoProducto = producto.codigo,
-                    nombre = producto.nombre,
-                    precio = producto.precio,
+                    codigoProducto = codigoProducto,
+                    nombre = nombre,
+                    precio = precio,
                     cantidad = 1
                 )
             }
 
             repository.insertar(nuevoItemEntity)
-            _mensajeFrow.value = "Producto ${producto.nombre} agregado al carrito!"
+            _mensajeFrow.value = "Producto $nombre agregado al carrito!"
         }
     }
     fun aumentarCantidad(codigo: String) {
