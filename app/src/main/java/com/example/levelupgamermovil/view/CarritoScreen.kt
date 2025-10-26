@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.carritoapp.model.ItemCarrito
+import com.example.levelupgamermovil.model.ItemCarrito
 import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 import com.example.levelupgamermovil.viewmodel.ThemeViewModel
 
