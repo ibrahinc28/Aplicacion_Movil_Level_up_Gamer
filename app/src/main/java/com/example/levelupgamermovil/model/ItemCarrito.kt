@@ -1,4 +1,6 @@
 package com.example.levelupgamermovil.model
 
-class ItemCarrito {
-}
+data class ItemCarrito (val codigoProducto: String,
+                        val nombre: String,
+                        val precio: Double,
+                        var cantidad: Int)
