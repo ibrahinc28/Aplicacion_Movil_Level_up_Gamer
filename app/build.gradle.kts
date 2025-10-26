@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.carritoapp"
+    namespace = "com.example.levelupgamermovil"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.carritoapp"
+        applicationId = "com.example.levelupgamermovil"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -42,7 +42,8 @@ android {
 }
 
 dependencies {
-    
+
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation("androidx.room:room-runtime:2.6.1")
