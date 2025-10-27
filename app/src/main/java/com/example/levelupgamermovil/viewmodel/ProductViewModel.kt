@@ -15,7 +15,10 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
     private val _productoList = MutableStateFlow<List<Producto>>(emptyList())
     val productoList: StateFlow<List<Producto>> = _productoList
 
-    init { cargarProductos() }
+    init {  viewModelScope.launch {
+        repository.inicializarProductosSiVacio()
+        cargarProductos()
+    }}
 
     fun cargarProductos() {
         viewModelScope.launch {
