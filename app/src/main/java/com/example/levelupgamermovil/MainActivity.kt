@@ -24,6 +24,8 @@ import com.example.levelupgamermovil.repository.CarritoRepository
 import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 import com.example.levelupgamermovil.viewmodel.ThemeViewModel
 import com.example.levelupgamermovil.model.AppDatabase
+import com.example.levelupgamermovil.repository.ProductRepository
+import com.example.levelupgamermovil.viewmodel.ProductViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +43,19 @@ class MainActivity : AppCompatActivity() {
             ).build()
 
             val carritoDao = db.carritoDao()
+            val productoDao = db.productoDao()
             val repo = CarritoRepository(carritoDao)
+            val productoRepo = ProductRepository(productoDao)
+
+
             val carritoViewModel: CarritoViewModel by viewModels { CarritoViewModel.Factory(repo) }
+            val productViewModel: ProductViewModel by viewModels { ProductViewModel.Factory(productoRepo) }
 
             val themeViewModel: ThemeViewModel = viewModels<ThemeViewModel>().value
 
             NavHost(
                 navController = navController,
-                startDestination = NavRoutes.LOGIN
+                startDestination = NavRoutes.HOME
             ) {
                 composable(NavRoutes.LOGIN) {
                     LoginScreen(navController, loginViewModel, usuariosGuardados)
