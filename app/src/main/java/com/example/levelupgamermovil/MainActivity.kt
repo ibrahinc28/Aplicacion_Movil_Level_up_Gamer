@@ -67,7 +67,10 @@ class MainActivity : AppCompatActivity() {
                     HomeScreen(navController)
                 }
                 composable(NavRoutes.PRODUCTOS) {
-                    ProductListScreen(navController)
+                    ProductListScreen( navController = navController,
+                    productViewModel = productViewModel,
+                    carritoViewModel = carritoViewModel
+                    )
                 }
                 composable(NavRoutes.CARRITO) {
                     CarritoScreen(

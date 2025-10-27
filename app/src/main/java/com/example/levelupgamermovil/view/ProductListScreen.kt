@@ -21,10 +21,11 @@ import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductListScreen(navController: NavHostController) {
+fun ProductListScreen(navController: NavHostController,
+                      productViewModel: ProductViewModel,
+                      carritoViewModel: CarritoViewModel) {
 
-    val productViewModel: ProductViewModel = viewModel()
-    val carritoViewModel: CarritoViewModel = viewModel()
+
     val products by productViewModel.productoList.collectAsState()
     Scaffold(
         topBar = {
