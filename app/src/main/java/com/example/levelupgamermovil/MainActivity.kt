@@ -1,47 +1,95 @@
 package com.example.levelupgamermovil
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
+
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
+import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.levelupgamermovil.navigation.NavRoutes
+import com.example.levelupgamermovil.view.LoginScreen
+import com.example.levelupgamermovil.view.userSignupScreen
+import com.example.levelupgamermovil.view.HomeScreen
+import com.example.levelupgamermovil.view.ProductListScreen
+import com.example.levelupgamermovil.view.CarritoScreen
+import com.example.levelupgamermovil.view.ResumenScreen
+import com.example.levelupgamermovil.viewmodel.LoginViewModel
+import com.example.levelupgamermovil.viewmodel.RegistroViewModel
+import com.example.levelupgamermovil.repository.UsuariosGuardados
+import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.example.levelupgamermovil.repository.CarritoRepository
+import com.example.levelupgamermovil.viewmodel.CarritoViewModel
+import com.example.levelupgamermovil.viewmodel.ThemeViewModel
+import com.example.levelupgamermovil.model.AppDatabase
+import com.example.levelupgamermovil.repository.ProductRepository
+import com.example.levelupgamermovil.view.screen.PerfilScreen
+import com.example.levelupgamermovil.viewmodel.ProductViewModel
+import com.example.levelupgamermovil.viewmodel.PerfilViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LevelUpGamerMovilTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+            val navController = rememberNavController()
+            val loginViewModel: LoginViewModel = viewModels<LoginViewModel>().value
+            val registroViewModel: RegistroViewModel = viewModels<RegistroViewModel>().value
+            val perfilViewModel: PerfilViewModel = viewModels<PerfilViewModel>().value
+            val usuariosGuardados = UsuariosGuardados()
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java,
+                "levelupgamer-db"
+            ).build()
+
+            val carritoDao = db.carritoDao()
+            val productoDao = db.productoDao()
+            val repo = CarritoRepository(carritoDao)
+            val productoRepo = ProductRepository(productoDao)
+
+
+            val carritoViewModel: CarritoViewModel by viewModels { CarritoViewModel.Factory(repo) }
+            val productViewModel: ProductViewModel by viewModels { ProductViewModel.Factory(productoRepo) }
+
+            val themeViewModel: ThemeViewModel = viewModels<ThemeViewModel>().value
+
+            NavHost(
+                navController = navController,
+                startDestination = NavRoutes.HOME
+            ) {
+                composable(NavRoutes.LOGIN) {
+                    LoginScreen(navController, loginViewModel, usuariosGuardados)
+                }
+                composable(NavRoutes.SIGNUP) {
+                    userSignupScreen(navController, registroViewModel)
+                }
+                composable(NavRoutes.HOME) {
+                    HomeScreen(navController)
+                }
+                composable(NavRoutes.PRODUCTOS) {
+                    ProductListScreen( navController = navController,
+                    productViewModel = productViewModel,
+                    carritoViewModel = carritoViewModel
                     )
                 }
+                composable(NavRoutes.CARRITO) {
+                    CarritoScreen(
+                        viewModel = carritoViewModel,
+                        themeViewModel = themeViewModel,
+                        onContinuarComprando = { navController.navigate(NavRoutes.PRODUCTOS) }
+                    )
+                }
+                composable(NavRoutes.RESUMEN) {
+                    ResumenScreen(navController, registroViewModel, usuariosGuardados)
+                }
+
+                composable(NavRoutes.PERFIL) {
+                    PerfilScreen(navController, perfilViewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LevelUpGamerMovilTheme {
-        Greeting("Android")
+        }
     }
 }
