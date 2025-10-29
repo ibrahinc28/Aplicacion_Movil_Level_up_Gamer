@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.text.font.FontWeight
+import com.example.levelupgamermovil.navigation.NavRoutes
 import com.example.levelupgamermovil.repository.UsuariosGuardados
 import com.example.levelupgamermovil.viewmodel.LoginViewModel
 
@@ -64,22 +65,21 @@ fun LoginScreen(navController : NavController, viewModel: LoginViewModel, usuari
         Button(
             onClick = {
                 if (viewModel.validarFormulario()) {
-                    navController.navigate("PerfilScreen")
+                    navController.navigate(NavRoutes.PERFIL)
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar sesión")
         }
+
         Button(
-            onClick = {navController.popBackStack()},
-            colors = ButtonDefaults.buttonColors(
-                Color.Black,
-                Color.White
-            )
-        )
-        {
-            Text("Volver")
+            onClick = {
+                navController.navigate(NavRoutes.SIGNUP)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Registrarse")
         }
     }
 }

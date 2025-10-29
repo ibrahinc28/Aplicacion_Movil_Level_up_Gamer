@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import com.example.levelupgamermovil.navigation.NavRoutes
 import com.example.levelupgamermovil.view.components.ImagenInteligente
 import com.example.levelupgamermovil.viewmodel.PerfilViewModel
 import java.io.File
@@ -87,21 +88,19 @@ fun PerfilScreen(navController : NavController, viewModel: PerfilViewModel) {
             }
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(onClick = {
-            when (PackageManager.PERMISSION_GRANTED) {
-                ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) -> {
-                    val uri = createImageUri(context)
-                    cameraUri = uri
-                    takePictureLauncher.launch(uri)
-                } else -> {
-        requestCameraPermission.launch(android.Manifest.permission.CAMERA)
-        }
-        }
-            }) {
-                Text("Tomar foto desde cámara")
+        Button(onClick =  {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                val uri = createImageUri(context)
+                cameraUri = uri
+                takePictureLauncher.launch(uri)
+            } else {
+                requestCameraPermission.launch(android.Manifest.permission.CAMERA)
             }
+        }) {
+            Text("Tomar foto desde cámara")
+        }
             Button(
-                onClick = {navController.navigate("HomeScreen")},
+                onClick = {navController.navigate(NavRoutes.HOME)},
                 colors = ButtonDefaults.buttonColors(
                     Color.Black,
                     Color.White

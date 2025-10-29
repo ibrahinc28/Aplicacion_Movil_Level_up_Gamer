@@ -25,7 +25,9 @@ import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 import com.example.levelupgamermovil.viewmodel.ThemeViewModel
 import com.example.levelupgamermovil.model.AppDatabase
 import com.example.levelupgamermovil.repository.ProductRepository
+import com.example.levelupgamermovil.view.screen.PerfilScreen
 import com.example.levelupgamermovil.viewmodel.ProductViewModel
+import com.example.levelupgamermovil.viewmodel.PerfilViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberNavController()
             val loginViewModel: LoginViewModel = viewModels<LoginViewModel>().value
             val registroViewModel: RegistroViewModel = viewModels<RegistroViewModel>().value
+            val perfilViewModel: PerfilViewModel = viewModels<PerfilViewModel>().value
             val usuariosGuardados = UsuariosGuardados()
             val db = Room.databaseBuilder(
                 applicationContext,
@@ -82,7 +85,11 @@ class MainActivity : AppCompatActivity() {
                 composable(NavRoutes.RESUMEN) {
                     ResumenScreen(navController, registroViewModel, usuariosGuardados)
                 }
+
+                composable(NavRoutes.PERFIL) {
+                    PerfilScreen(navController, perfilViewModel)
             }
+        }
         }
     }
 }
