@@ -69,7 +69,7 @@ fun HomeScreen(navController: NavController) {
             }
 
             Button(
-                onClick = { navController.navigate(NavRoutes.SIGNUP) },
+                onClick = { navController.navigate(NavRoutes.LOGIN) },
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 colors = ButtonDefaults.buttonColors(Color(0xFF8E24AA))
             ) {
