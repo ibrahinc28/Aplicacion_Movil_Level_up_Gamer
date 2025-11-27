@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import com.example.levelupgamermovil.model.DatosUsuarioUIState
+import com.example.levelupgamermovil.navigation.NavRoutes
 import com.example.levelupgamermovil.repository.UsuariosGuardados
 
 @Composable
@@ -28,7 +29,7 @@ fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel, u
         usuarios.agregarUsuario(DatosUsuarioUIState(estado.nombre, estado.correo, estado.clave, estado.direccion, estado.aceptaTerminos))
 
         Button(
-            onClick = {navController.navigate("HomeScreen")},
+            onClick = {navController.navigate(NavRoutes.HOME)},
             colors = ButtonDefaults.buttonColors(
                 Color.Black,
                 Color.White
