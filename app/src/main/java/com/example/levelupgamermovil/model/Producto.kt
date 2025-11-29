@@ -31,7 +31,7 @@ data class Producto(
 
     fun getFullImageUrl(): String {
         return if (imagenPath != null && !imagenPath.startsWith("http")) {
-            "http://10.0.2.2:8080$imagenPath"
+            "http://192.168.1.89:8080$imagenPath"
         } else {
             imagenPath ?: ""
         }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.levelupgamermovil.model.GameNews
 import com.example.levelupgamermovil.model.Producto
 import com.example.levelupgamermovil.network.RetrofitClient
 import com.example.levelupgamermovil.repository.ProductRepository
