@@ -26,6 +26,9 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
     var mensajeError by mutableStateOf<String?>(null)
         private set
 
+    var juegosGratis by mutableStateOf<List<GameNews>>(emptyList())
+        private set
+
     init {
 
         cargarProductos()
@@ -67,6 +70,22 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
                 }
             } catch (e: Exception) {
                 mensajeError = "No se pudo crear: ${e.message}"
+            }
+        }
+    }
+
+    fun cargarNoticiasGamer() {
+        viewModelScope.launch {
+            try {
+                // Usamos el cliente EXTERNO, no el de tu backend
+                val response = com.example.levelupgamermovil.network.ExternalRetrofitClient.service.getFreeGames()
+                if (response.isSuccessful) {
+                    // Tomamos solo los primeros 5 para no saturar
+                    juegosGratis = response.body()?.take(5) ?: emptyList()
+                }
+            } catch (e: Exception) {
+                // Si falla la API externa, no importa, no bloquea la app principal
+                println("Fallo API Externa: ${e.message}")
             }
         }
     }

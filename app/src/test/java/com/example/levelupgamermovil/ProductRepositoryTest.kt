@@ -44,4 +44,19 @@ class ProductRepositoryTest {
 
         coVerify(exactly = 1) { mockDao.insert(producto) }
     }
+
+    @Test
+    fun `insertarLista debe guardar multiples productos en el DAO`() = runTest {
+
+        val lista = listOf(
+            Producto(1L, "A", "N", "D", "C", 10.0, null),
+            Producto(2L, "B", "N", "D", "C", 20.0, null)
+        )
+
+
+        repository.insertarLista(lista)
+
+
+        coVerify(exactly = 1) { mockDao.insertAll(lista) }
+    }
 }
