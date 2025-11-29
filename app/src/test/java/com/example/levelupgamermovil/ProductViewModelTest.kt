@@ -91,4 +91,33 @@ class ProductViewModelTest {
         assertEquals(1, viewModel.listaProductos.size)
         assertEquals("Producto Internet", viewModel.listaProductos[0].nombre)
     }
+
+    @Test
+    fun `agregarProducto debe llamar al repositorio para guardar el nuevo item`() = runTest {
+        // --- 1. DADO QUE (GIVEN) ---
+        // Preparamos un producto nuevo
+        val nuevoProducto = Producto(
+            id = 3L,
+            nombre = "Nuevo Juego",
+            description = "Descripción nueva",
+            categoria = "Estreno",
+            price = 30000.0,
+            imagenPath = null,
+            codigo = "NEW1"
+        )
+
+
+        coEvery { repository.insertarProducto(any()) } returns Unit
+
+
+        coEvery { repository.obtenerProductosDeApi() } returns listOf(nuevoProducto)
+
+
+        viewModel = ProductViewModel(repository)
+        viewModel.agregarProducto(nuevoProducto)
+
+
+        io.mockk.coVerify(exactly = 1) { repository.insertarProducto(nuevoProducto) }
+
+    }
 }
