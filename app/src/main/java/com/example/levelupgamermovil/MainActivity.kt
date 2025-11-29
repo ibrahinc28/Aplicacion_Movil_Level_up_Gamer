@@ -3,6 +3,7 @@ package com.example.levelupgamermovil
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.WindowCompat
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,16 +20,20 @@ import com.example.levelupgamermovil.repository.UsuariosGuardados
 import com.example.levelupgamermovil.ui.theme.LevelUpGamerMovilTheme
 import com.example.levelupgamermovil.view.LoginScreen
 import com.example.levelupgamermovil.view.ResumenScreen
+import com.example.levelupgamermovil.view.UsuarioAPIScreen
 import com.example.levelupgamermovil.view.homeScreen
 import com.example.levelupgamermovil.view.screen.PerfilScreen
 import com.example.levelupgamermovil.view.userSignupScreen
 import com.example.levelupgamermovil.viewmodel.LoginViewModel
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
 import com.example.levelupgamermovil.viewmodel.PerfilViewModel
+import com.example.levelupgamermovil.viewmodel.UsuarioViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
@@ -36,6 +41,7 @@ class MainActivity : ComponentActivity() {
             val regViewModel : RegistroViewModel = viewModel()
             val loginViewModel : LoginViewModel = viewModel()
             val camViewModel: PerfilViewModel = viewModel()
+            val apiViewModel: UsuarioViewModel = viewModel()
 
             NavHost(navController = navController, startDestination = "HomeScreen") {
                 composable("HomeScreen") {
@@ -48,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("ResumenScreen") {
                     ResumenScreen(
-                        navController, regViewModel, UsuariosGuardados()
+                        navController, regViewModel
                     )
                 }
                 composable("LoginScreen") {
@@ -59,6 +65,11 @@ class MainActivity : ComponentActivity() {
                 composable("PerfilScreen") {
                     PerfilScreen(
                         navController, camViewModel
+                    )
+                }
+                composable("UsuarioAPIScreen") {
+                    UsuarioAPIScreen(
+                        navController, apiViewModel
                     )
                 }
             }

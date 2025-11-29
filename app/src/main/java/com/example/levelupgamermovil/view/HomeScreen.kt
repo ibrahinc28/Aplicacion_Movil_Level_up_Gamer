@@ -77,6 +77,14 @@ fun homeScreen(navController : NavController) {
             ) {
                 Text("Camara")
             }
+            Button(onClick = {navController.navigate("UsuarioAPIScreen")},
+                colors = ButtonDefaults.buttonColors(
+                    Color.Red,
+                    Color.White
+                )
+            ) {
+                Text("API Test")
+            }
         }
     }
 }
