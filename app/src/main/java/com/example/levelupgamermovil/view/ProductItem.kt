@@ -6,9 +6,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.levelupgamermovil.model.Producto
 
 @Composable
@@ -16,6 +16,12 @@ fun ProductItem(
     product: Producto,
     onAddToCart: (Producto) -> Unit
 ) {
+
+    val context = LocalContext.current
+
+
+    val imageRes = product.getDrawableId(context)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -26,21 +32,17 @@ fun ProductItem(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            AsyncImage(
-                model = product.getFullImageUrl(),
+
+            Image(
+                painter = painterResource(id = imageRes),
                 contentDescription = product.nombre,
                 modifier = Modifier
                     .height(150.dp)
                     .fillMaxWidth(),
-                contentScale = ContentScale.Crop,
-
-                placeholder = painterResource(android.R.drawable.ic_menu_gallery),
-
-                error = painterResource(android.R.drawable.ic_delete)
+                contentScale = ContentScale.Fit // O .Crop si quieres recortar
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-
 
             Text(text = product.nombre, style = MaterialTheme.typography.titleMedium)
 

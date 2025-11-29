@@ -1,4 +1,5 @@
 package com.example.levelupgamermovil.model
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -28,12 +29,23 @@ data class Producto(
     val imagenPath: String?
 
 ){
+    fun getDrawableId(context: Context): Int {
+        if (imagenPath.isNullOrEmpty()) return 0 // O un R.drawable.placeholder
 
-    fun getFullImageUrl(): String {
-        return if (imagenPath != null && !imagenPath.startsWith("http")) {
-            "http://192.168.1.89:8080$imagenPath"
-        } else {
-            imagenPath ?: ""
-        }
+
+        val nombreLimpio = imagenPath
+            .replace("/images/", "")
+            .replace(".png", "")
+            .replace(".jpg", "")
+            .lowercase()
+
+
+        return context.resources.getIdentifier(
+            nombreLimpio,
+            "drawable",
+            context.packageName
+        )
     }
 }
+
+
