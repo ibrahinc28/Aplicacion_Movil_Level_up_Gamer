@@ -19,8 +19,13 @@ class ProductRepository(private val productoDao: ProductoDao) {
     suspend fun obtenerProductosDeApi(): List<Producto>? {
         return try {
             val respuesta = com.example.levelupgamermovil.network.RetrofitClient.webService.obtenerProductos()
-            if (respuesta.isSuccessful) respuesta.body() else null
+            if (respuesta.isSuccessful) respuesta.body() else {
+                android.util.Log.e("ERROR_API", "Error del servidor: ${respuesta.code()}")
+                null
+            }
         } catch (e: Exception) {
+            android.util.Log.e("ERROR_API", "Fallo critico: ${e.message}")
+            e.printStackTrace()
             null
         }
     }
