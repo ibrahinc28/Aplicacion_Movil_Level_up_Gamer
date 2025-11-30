@@ -26,7 +26,10 @@ fun ProductListScreen(navController: NavHostController,
                       carritoViewModel: CarritoViewModel) {
 
 
-    val products by productViewModel.productoList.collectAsState()
+    val isLoading = productViewModel.isLoading
+    val error = productViewModel.mensajeError
+    val products = productViewModel.listaProductos
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -34,22 +37,36 @@ fun ProductListScreen(navController: NavHostController,
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
-            items(products) { product ->
-                ProductItem(
-                    product = product,
-                    onAddToCart = { selectedProduct ->
-                        carritoViewModel.agregarItem(
-                            selectedProduct.id,
-                            selectedProduct.name,
-                            selectedProduct.price
+        // Manejo básico de estados de carga
+        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
+            } else if (error != null) {
+                Text(text = "Error: $error", modifier = Modifier.fillMaxSize().wrapContentSize())
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(items = products) { product ->
+                        ProductItem(
+                            product = product,
+                            onAddToCart = { selectedProduct ->
+
+
+                                carritoViewModel.agregarItem(
+
+                                    codigoProducto = selectedProduct.id.toString(),
+
+
+                                    nombre = selectedProduct.nombre,
+
+                                    precio = selectedProduct.price
+                                )
+                            }
                         )
                     }
-                )
+                }
             }
         }
     }

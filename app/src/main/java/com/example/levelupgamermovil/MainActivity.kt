@@ -1,60 +1,59 @@
 package com.example.levelupgamermovil
 
 
+import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.levelupgamermovil.navigation.NavRoutes
-import com.example.levelupgamermovil.view.LoginScreen
-import com.example.levelupgamermovil.view.userSignupScreen
-import com.example.levelupgamermovil.view.HomeScreen
-import com.example.levelupgamermovil.view.ProductListScreen
-import com.example.levelupgamermovil.view.CarritoScreen
-import com.example.levelupgamermovil.view.ResumenScreen
-import com.example.levelupgamermovil.viewmodel.LoginViewModel
-import com.example.levelupgamermovil.viewmodel.RegistroViewModel
-import com.example.levelupgamermovil.repository.UsuariosGuardados
-import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import com.example.levelupgamermovil.repository.CarritoRepository
-import com.example.levelupgamermovil.viewmodel.CarritoViewModel
-import com.example.levelupgamermovil.viewmodel.ThemeViewModel
 import com.example.levelupgamermovil.model.AppDatabase
+import com.example.levelupgamermovil.navigation.NavRoutes
+import com.example.levelupgamermovil.repository.CarritoRepository
 import com.example.levelupgamermovil.repository.ProductRepository
+import com.example.levelupgamermovil.repository.UsuariosGuardados
+import com.example.levelupgamermovil.view.*
 import com.example.levelupgamermovil.view.screen.PerfilScreen
-import com.example.levelupgamermovil.viewmodel.ProductViewModel
-import com.example.levelupgamermovil.viewmodel.PerfilViewModel
+import com.example.levelupgamermovil.viewmodel.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "levelupgamer-db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+
+        val carritoDao = db.carritoDao()
+        val productoDao = db.productoDao()
+
+        val repoCarrito = CarritoRepository(carritoDao)
+        val repoProducto = ProductRepository(productoDao)
+        val usuariosGuardados = UsuariosGuardados()
+
+        val loginViewModel: LoginViewModel by viewModels()
+        val registroViewModel: RegistroViewModel by viewModels()
+        val perfilViewModel: PerfilViewModel by viewModels()
+        val themeViewModel: ThemeViewModel by viewModels()
+
+        val carritoViewModel: CarritoViewModel by viewModels {
+            CarritoViewModel.Factory(repoCarrito)
+        }
+
+        val productViewModel: ProductViewModel by viewModels {
+            ProductViewModel.Factory(repoProducto)
+        }
+
         setContent {
             val navController = rememberNavController()
-            val loginViewModel: LoginViewModel = viewModels<LoginViewModel>().value
-            val registroViewModel: RegistroViewModel = viewModels<RegistroViewModel>().value
-            val perfilViewModel: PerfilViewModel = viewModels<PerfilViewModel>().value
-            val usuariosGuardados = UsuariosGuardados()
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                "levelupgamer-db"
-            ).build()
-
-            val carritoDao = db.carritoDao()
-            val productoDao = db.productoDao()
-            val repo = CarritoRepository(carritoDao)
-            val productoRepo = ProductRepository(productoDao)
-
-
-            val carritoViewModel: CarritoViewModel by viewModels { CarritoViewModel.Factory(repo) }
-            val productViewModel: ProductViewModel by viewModels { ProductViewModel.Factory(productoRepo) }
-
-            val themeViewModel: ThemeViewModel = viewModels<ThemeViewModel>().value
 
             NavHost(
                 navController = navController,
@@ -67,12 +66,16 @@ class MainActivity : AppCompatActivity() {
                     userSignupScreen(navController, registroViewModel)
                 }
                 composable(NavRoutes.HOME) {
-                    HomeScreen(navController)
+                    HomeScreen(
+                        navController = navController,
+                        productViewModel = productViewModel
+                    )
                 }
                 composable(NavRoutes.PRODUCTOS) {
-                    ProductListScreen( navController = navController,
-                    productViewModel = productViewModel,
-                    carritoViewModel = carritoViewModel
+                    ProductListScreen(
+                        navController = navController,
+                        productViewModel = productViewModel,
+                        carritoViewModel = carritoViewModel
                     )
                 }
                 composable(NavRoutes.CARRITO) {
@@ -85,11 +88,10 @@ class MainActivity : AppCompatActivity() {
                 composable(NavRoutes.RESUMEN) {
                     ResumenScreen(navController, registroViewModel, usuariosGuardados)
                 }
-
                 composable(NavRoutes.PERFIL) {
                     PerfilScreen(navController, perfilViewModel)
+                }
             }
-        }
         }
     }
 }

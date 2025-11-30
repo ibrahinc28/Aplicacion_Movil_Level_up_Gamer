@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.levelupgamermovil.model.Producto
 
 @Composable
@@ -14,6 +16,9 @@ fun ProductItem(
     product: Producto,
     onAddToCart: (Producto) -> Unit
 ) {
+    val context = LocalContext.current
+    val imageRes = product.getDrawableId(context)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -23,20 +28,39 @@ fun ProductItem(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+
+            val imagenAUsar = if (imageRes != 0) {
+                painterResource(id = imageRes)
+            } else {
+                painterResource(id = android.R.drawable.ic_menu_gallery)
+            }
+
             Image(
-                painter = painterResource(id = product.imageRes),
-                contentDescription = product.name,
+                painter = imagenAUsar,
+                contentDescription = product.nombre,
                 modifier = Modifier
-                    .size(120.dp)
-                    .fillMaxWidth()
+                    .height(150.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Fit
             )
+
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = product.name, style = MaterialTheme.typography.titleMedium)
+
+            Text(text = product.nombre, style = MaterialTheme.typography.titleMedium)
+
             Spacer(modifier = Modifier.height(4.dp))
+
             Text(text = product.description, style = MaterialTheme.typography.bodyMedium)
+
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "Precio: \$${"%.2f".format(product.price)}", style = MaterialTheme.typography.bodyMedium)
+
+            Text(
+                text = "Precio: $${"%.0f".format(product.price)}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Button(
                 onClick = { onAddToCart(product) },
                 modifier = Modifier.fillMaxWidth()

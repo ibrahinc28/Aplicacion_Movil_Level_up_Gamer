@@ -40,8 +40,6 @@ android {
 }
 
 dependencies {
-
-    // --- DEPENDENCIAS DE IMPLEMENTACIÓN (Core/UI/Data) ---
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -87,7 +85,25 @@ dependencies {
     // Coroutines Testing (runTest)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
-    // --- DEPENDENCIAS DE PRUEBAS DE UI/INSTRUMENTACIÓN (DISPOSITIVO - Carpeta 'androidTest') ---
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.androidx.ui)
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
+    testImplementation(libs.junit)
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
