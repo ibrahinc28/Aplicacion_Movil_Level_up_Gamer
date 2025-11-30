@@ -16,10 +16,7 @@ fun ProductItem(
     product: Producto,
     onAddToCart: (Producto) -> Unit
 ) {
-
     val context = LocalContext.current
-
-
     val imageRes = product.getDrawableId(context)
 
     Card(
@@ -32,14 +29,19 @@ fun ProductItem(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
+            val imagenAUsar = if (imageRes != 0) {
+                painterResource(id = imageRes)
+            } else {
+                painterResource(id = android.R.drawable.ic_menu_gallery)
+            }
 
             Image(
-                painter = painterResource(id = imageRes),
+                painter = imagenAUsar,
                 contentDescription = product.nombre,
                 modifier = Modifier
                     .height(150.dp)
                     .fillMaxWidth(),
-                contentScale = ContentScale.Fit // O .Crop si quieres recortar
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.height(8.dp))
