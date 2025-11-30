@@ -1,7 +1,6 @@
 package com.example.levelupgamermovil.network
 
 import com.example.levelupgamermovil.model.Producto
-import com.example.levelupgamermovil.model.UsuarioAPI
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
