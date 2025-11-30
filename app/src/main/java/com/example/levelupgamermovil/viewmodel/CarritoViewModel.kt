@@ -1,14 +1,17 @@
 package com.example.levelupgamermovil.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.levelupgamermovil.model.AppDatabase
 import com.example.levelupgamermovil.model.CarritoEstado
 import com.example.levelupgamermovil.model.CarritoItemEntity
 import com.example.levelupgamermovil.model.ItemCarrito
 import com.example.levelupgamermovil.repository.CarritoRepository
+import com.example.levelupgamermovil.remote.RetrofitInstance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +19,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() {
+open class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() {
 
     private val _mensajeFrow = MutableStateFlow<String?>(null)
     private val _compraFinalizada = MutableStateFlow(false)
@@ -28,7 +31,8 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-    val estado: StateFlow<CarritoEstado> = ITEMS_FLOW.combine(_mensajeFrow) { itemsEntity, mensaje -> itemsEntity to mensaje }
+
+    open val estado: StateFlow<CarritoEstado> = ITEMS_FLOW.combine(_mensajeFrow) { itemsEntity, mensaje -> itemsEntity to mensaje }
         .combine(_compraFinalizada){ (itemsEntity, mensaje), finalizada ->
             val items = itemsEntity.map { entity: CarritoItemEntity ->
                 ItemCarrito(
@@ -60,9 +64,25 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
 
         )
 
+    init {
+        sincronizarCarritoInicial()
+    }
+
+    private fun sincronizarCarritoInicial() {
+        viewModelScope.launch {
+            try {
+                val carritoRemoto = repository.obtenerCarritoRemoto()
+
+            } catch (e: Exception) {
+                _mensajeFrow.value = "Error al sincronizar el carrito remoto."
+            }
+        }
+    }
+
     fun agregarItem(codigoProducto: String, nombre: String, precio: Double) {
         viewModelScope.launch {
             _mensajeFrow.value = null
+
             val itemExistente = ITEMS_FLOW.value.find { it.codigoProducto == codigoProducto }
 
             val nuevoItemEntity = if (itemExistente != null) {
@@ -76,15 +96,31 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
                 )
             }
 
-            repository.insertar(nuevoItemEntity)
-            _mensajeFrow.value = "Producto $nombre agregado al carrito!"
+            try {
+                repository.insertar(nuevoItemEntity)
+
+                val itemParaApi = ItemCarrito(codigoProducto, nombre, precio, 1)
+                repository.agregarItemRemoto(itemParaApi)
+
+                _mensajeFrow.value = "Producto $nombre agregado al carrito!"
+            } catch (e: Exception) {
+                _mensajeFrow.value = "Error al agregar el producto remotamente."
+                println("Error al agregar item: ${e.message}")
+            }
         }
     }
+
     fun aumentarCantidad(codigo: String) {
         viewModelScope.launch {
             val item = ITEMS_FLOW.value.find { it.codigoProducto == codigo }
             if (item != null) {
                 repository.actualizar(item.copy(cantidad = item.cantidad + 1))
+                try {
+                    val itemParaApi = ItemCarrito(item.codigoProducto, item.nombre, item.precio, 1)
+                    repository.agregarItemRemoto(itemParaApi)
+                } catch (e: Exception) {
+                    _mensajeFrow.value = "Error al aumentar cantidad remotamente."
+                }
             }
         }
     }
@@ -98,37 +134,67 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
                 }else{
                     repository.eliminarPorCodigo(codigo)
                 }
+
+                try {
+                    repository.eliminarItemRemoto(codigo)
+                } catch (e: Exception) {
+                    _mensajeFrow.value = "Error al disminuir/eliminar remotamente."
+                }
             }
         }
     }
     fun eliminarItem(codigo: String) {
         viewModelScope.launch {
             repository.eliminarPorCodigo(codigo)
+            try {
+                repository.eliminarItemRemoto(codigo)
+            } catch (e: Exception) {
+                _mensajeFrow.value = "Error al eliminar el item remotamente."
+            }
         }
     }
 
     fun vaciarCarrito() {
         viewModelScope.launch {
-            repository.vaciar()
+            repository.vaciarLocal()
             _mensajeFrow.value = "El carrito se ha vaciado."
             _compraFinalizada.value = false
         }
     }
+
     fun finalizarCompra() {
-        if (ITEMS_FLOW.value.isEmpty()) {
+        val currentItems = estado.value.items
+
+        if (currentItems.isEmpty()) {
             _mensajeFrow.value = "Tu carrito está vacío. Añade productos para continuar."
             _compraFinalizada.value = false
             return
         }
+
         viewModelScope.launch {
-            repository.vaciar()
-            _mensajeFrow.value = "¡Gracias por tu compra! Tu pedido está en proceso."
-            _compraFinalizada.value = true
+            try {
+                repository.finalizarCompraRemota(currentItems)
+
+                _mensajeFrow.value = "¡Gracias por tu compra! Tu pedido está en proceso."
+                _compraFinalizada.value = true
+
+            } catch (e: Exception) {
+                _mensajeFrow.value = "Error de conexión al finalizar la compra."
+                _compraFinalizada.value = false
+                println("Error de compra: ${e.message}")
+            }
         }
     }
+
     companion object {
-        fun Factory(repository: CarritoRepository): ViewModelProvider.Factory = viewModelFactory {
+        fun Factory(context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
+                val db = AppDatabase.getDataBase(context)
+                val dao = db.carritoDao()
+                val apiService = RetrofitInstance.api
+
+                val repository = CarritoRepository(dao, apiService)
+
                 CarritoViewModel(repository)
             }
         }
