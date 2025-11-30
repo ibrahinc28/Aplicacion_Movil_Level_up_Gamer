@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val repoCarrito = CarritoRepository(carritoDao)
         val repoProducto = ProductRepository(productoDao)
         val usuariosGuardados = UsuariosGuardados()
+        val apiViewModel: UsuarioViewModel by viewModels()
 
         val loginViewModel: LoginViewModel by viewModels()
         val registroViewModel: RegistroViewModel by viewModels()
@@ -85,11 +87,16 @@ class MainActivity : AppCompatActivity() {
                         onContinuarComprando = { navController.navigate(NavRoutes.PRODUCTOS) }
                     )
                 }
-                composable(NavRoutes.RESUMEN) {
-                    ResumenScreen(navController, registroViewModel, usuariosGuardados)
+                composable("ResumenScreen") {
+                    ResumenScreen(navController, registroViewModel)
                 }
                 composable(NavRoutes.PERFIL) {
                     PerfilScreen(navController, perfilViewModel)
+                }
+                composable("UsuarioAPIScreen") {
+                    UsuarioAPIScreen(
+                        navController, apiViewModel
+                    )
                 }
             }
         }

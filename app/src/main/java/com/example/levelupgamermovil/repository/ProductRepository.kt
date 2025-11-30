@@ -2,7 +2,6 @@ package com.example.levelupgamermovil.repository
 
 import com.example.levelupgamermovil.model.Producto
 import com.example.levelupgamermovil.model.ProductoDao
-import com.example.levelupgamermovil.R
 
 class ProductRepository(private val productoDao: ProductoDao) {
     // 1. Obtiene la lista desde la base de datos local (Room)

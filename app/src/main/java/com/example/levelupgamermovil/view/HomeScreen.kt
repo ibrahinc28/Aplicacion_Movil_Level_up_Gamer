@@ -141,19 +141,20 @@ fun HomeScreen(navController: NavController, productViewModel: ProductViewModel 
             }
 
             Button(
-                onClick = { navController.navigate(NavRoutes.RESUMEN) },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFF57C00))
-            ) {
-                Text("Resumen")
-            }
-
-            Button(
                 onClick = { navController.navigate(NavRoutes.LOGIN) },
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 colors = ButtonDefaults.buttonColors(Color(0xFF8E24AA))
             ) {
                 Text("Usuarios")
+            }
+
+            Button(onClick = {navController.navigate("UsuarioAPIScreen")},
+                colors = ButtonDefaults.buttonColors(
+                    Color.Red,
+                    Color.White
+                )
+            ) {
+                Text("Usuarios registrados")
             }
         }
     }
