@@ -6,8 +6,8 @@ import com.example.levelupgamermovil.network.RetrofitInstance
 import retrofit2.Retrofit
 
 
-class UsuarioRepository {
-    suspend fun getUsuarios(): List<UsuarioAPI> {
+open class UsuarioRepository {
+    open suspend fun getUsuarios(): List<UsuarioAPI> {
         return RetrofitInstance.api.getUsuarios()
     }
 

@@ -1,11 +1,15 @@
 package com.example.levelupgamermovil.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.levelupgamermovil.model.LoginErrores
+import com.example.levelupgamermovil.model.UsuarioAPI
 import com.example.levelupgamermovil.model.UsuarioLogin
+import com.example.levelupgamermovil.network.RetrofitInstance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val _estado = MutableStateFlow(UsuarioLogin())

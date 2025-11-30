@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("LoginScreen") {
                     LoginScreen(
-                        navController, loginViewModel, UsuariosGuardados()
+                        navController, loginViewModel
                     )
                 }
                 composable("PerfilScreen") {

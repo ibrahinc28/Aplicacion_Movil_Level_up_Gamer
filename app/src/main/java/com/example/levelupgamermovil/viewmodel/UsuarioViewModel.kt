@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class UsuarioViewModel: ViewModel() {
-    private val repositorio = UsuarioRepository()
+open class UsuarioViewModel: ViewModel() {
+    val repositorio = UsuarioRepository()
 
-    private val _userList = MutableStateFlow<List<UsuarioAPI>>(emptyList())
+    val _userList = MutableStateFlow<List<UsuarioAPI>>(emptyList())
 
     val userList: StateFlow<List<UsuarioAPI>> = _userList
 
@@ -20,7 +20,7 @@ class UsuarioViewModel: ViewModel() {
         fetchUsers()
     }
 
-    private fun fetchUsers() {
+    open fun fetchUsers() {
         viewModelScope.launch {
             try {
                 _userList.value = repositorio.getUsuarios()

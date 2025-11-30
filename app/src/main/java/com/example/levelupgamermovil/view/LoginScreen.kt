@@ -23,7 +23,7 @@ import com.example.levelupgamermovil.repository.UsuariosGuardados
 import com.example.levelupgamermovil.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController : NavController, viewModel: LoginViewModel, usuarios: UsuariosGuardados) {
+fun LoginScreen(navController : NavController, viewModel: LoginViewModel) {
     val estado2 by viewModel.estado.collectAsState()
 
     Column(

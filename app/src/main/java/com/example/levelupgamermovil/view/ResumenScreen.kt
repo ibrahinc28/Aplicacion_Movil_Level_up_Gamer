@@ -14,11 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.levelupgamermovil.viewmodel.RegistroViewModel
-import com.example.levelupgamermovil.model.DatosUsuarioUIState
 import com.example.levelupgamermovil.model.UsuarioAPI
-import com.example.levelupgamermovil.repository.UsuarioRepository
-import com.example.levelupgamermovil.repository.UsuariosGuardados
-import com.example.levelupgamermovil.viewmodel.UsuarioViewModel
 
 @Composable
 fun ResumenScreen(navController : NavController, viewModel: RegistroViewModel) {
