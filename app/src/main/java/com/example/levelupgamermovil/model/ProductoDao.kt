@@ -2,6 +2,9 @@ package com.example.levelupgamermovil.model
 
 import androidx.room.*
 import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 
 
 @Dao

@@ -20,6 +20,7 @@ class ProductRepository(private val productoDao: ProductoDao) {
             val respuesta = com.example.levelupgamermovil.network.RetrofitClient.webService.obtenerProductos()
             if (respuesta.isSuccessful) respuesta.body() else {
                 android.util.Log.e("ERROR_API", "Error del servidor: ${respuesta.code()}")
+
                 null
             }
         } catch (e: Exception) {

@@ -15,5 +15,5 @@ Registro de usuario e inicio de sesión
 Uso de cámara y galería en perfil de usuario
 
 Endpoints:
-Localhost (API local, utilizada para guardar usuarios y cargar productos)
+Backend (API de backend, subida en EC2)
 https://www.freetogame.com/ (API externa, muestra juegos dest             acados en página principal)
