@@ -32,37 +32,38 @@ open class CarritoViewModel(private val repository: CarritoRepository) : ViewMod
             initialValue = emptyList()
         )
 
-    open val estado: StateFlow<CarritoEstado> = ITEMS_FLOW.combine(_mensajeFrow) { itemsEntity, mensaje -> itemsEntity to mensaje }
-        .combine(_compraFinalizada){ (itemsEntity, mensaje), finalizada ->
-            val items = itemsEntity.map { entity: CarritoItemEntity ->
-                ItemCarrito(
-                    codigoProducto = entity.codigoProducto,
-                    nombre = entity.nombre,
-                    precio = entity.precio,
-                    cantidad = entity.cantidad
+    open val estado: StateFlow<CarritoEstado> =
+        ITEMS_FLOW.combine(_mensajeFrow) { itemsEntity, mensaje -> itemsEntity to mensaje }
+            .combine(_compraFinalizada) { (itemsEntity, mensaje), finalizada ->
+                val items = itemsEntity.map { entity: CarritoItemEntity ->
+                    ItemCarrito(
+                        codigoProducto = entity.codigoProducto,
+                        nombre = entity.nombre,
+                        precio = entity.precio,
+                        cantidad = entity.cantidad
+                    )
+                }
+
+                val nuevoSubtotal = items.sumOf { it.precio * it.cantidad }
+                val nuevoCostoEnvio = if (items.isNotEmpty()) 5000.0 else 0.0
+                val nuevoTotal = nuevoSubtotal + nuevoCostoEnvio
+                val nuevoTotalArticulos = items.sumOf { it.cantidad }
+
+                CarritoEstado(
+                    items = items,
+                    subtotal = nuevoSubtotal,
+                    costoEnvio = nuevoCostoEnvio,
+                    total = nuevoTotal,
+                    totalArticulos = nuevoTotalArticulos,
+                    mensajeConfirmado = mensaje,
+                    compraFinalizada = finalizada
                 )
-            }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = CarritoEstado()
 
-            val nuevoSubtotal = items.sumOf { it.precio * it.cantidad }
-            val nuevoCostoEnvio = if (items.isNotEmpty()) 5000.0 else 0.0
-            val nuevoTotal = nuevoSubtotal + nuevoCostoEnvio
-            val nuevoTotalArticulos = items.sumOf { it.cantidad }
-
-            CarritoEstado(
-                items = items,
-                subtotal = nuevoSubtotal,
-                costoEnvio = nuevoCostoEnvio,
-                total = nuevoTotal,
-                totalArticulos = nuevoTotalArticulos,
-                mensajeConfirmado = mensaje,
-                compraFinalizada = finalizada
             )
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarritoEstado()
-
-        )
 
     init {
         sincronizarCarritoInicial()
@@ -128,10 +129,10 @@ open class CarritoViewModel(private val repository: CarritoRepository) : ViewMod
     fun disminuirCantidad(codigo: String) {
         viewModelScope.launch {
             val item = ITEMS_FLOW.value.find { it.codigoProducto == codigo }
-            if (item != null){
-                if(item.cantidad > 1){
+            if (item != null) {
+                if (item.cantidad > 1) {
                     repository.actualizar(item.copy(cantidad = item.cantidad - 1))
-                }else{
+                } else {
                     repository.eliminarPorCodigo(codigo)
                 }
 
@@ -143,6 +144,7 @@ open class CarritoViewModel(private val repository: CarritoRepository) : ViewMod
             }
         }
     }
+
     fun eliminarItem(codigo: String) {
         viewModelScope.launch {
             repository.eliminarPorCodigo(codigo)
@@ -190,10 +192,11 @@ open class CarritoViewModel(private val repository: CarritoRepository) : ViewMod
         fun Factory(context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val db = AppDatabase.getDataBase(context)
-                val dao = db.carritoDao()
+                val carritoDao = db.carritoDao()
+
                 val apiService = RetrofitInstance.api
 
-                val repository = CarritoRepository(dao, apiService)
+                val repository = CarritoRepository(carritoDao, apiService)
 
                 CarritoViewModel(repository)
             }

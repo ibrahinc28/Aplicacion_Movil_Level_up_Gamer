@@ -1,8 +1,7 @@
-package com.example.levelupgamermovil
+package com.example.levelupgamermovil.test
 
 import com.example.levelupgamermovil.model.CarritoEstado
 import com.example.levelupgamermovil.model.CarritoItemEntity
-import com.example.levelupgamermovil.model.ItemCarrito
 import com.example.levelupgamermovil.repository.CarritoRepository
 import com.example.levelupgamermovil.viewmodel.CarritoViewModel
 import io.kotest.core.spec.style.StringSpec
@@ -28,7 +27,6 @@ class CarritoViewModelTest : StringSpec({
             coEvery { mockRepository.finalizarCompraRemota(any()) } returns Unit
 
             val viewModel = CarritoViewModel(repository = mockRepository)
-
 
             viewModel.finalizarCompra()
 

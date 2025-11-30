@@ -10,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import com.example.levelupgamermovil.model.CarritoEstado
 
 class CarritoRepositoryTest : StringSpec({
 
@@ -23,9 +22,9 @@ class CarritoRepositoryTest : StringSpec({
         ItemCarrito(codigoProducto = "1", nombre = "Producto 1", precio = 1000.0, cantidad = 2)
     )
 
-    "finalizarCompraRemota() debe llamar al microservicio y vaciar la base de datos local si tiene éxito" {
+    "finalizarCompraRemota() debe llamar a la API para limpiar y vaciar la base de datos local si tiene éxito" {
         runTest {
-            coEvery { mockApi.clearCart() } throws Exception("Error de conexión simulado")
+            coEvery { mockApi.clearCart() } returns mockk()
 
             repo.finalizarCompraRemota(itemsFake)
 
@@ -36,7 +35,9 @@ class CarritoRepositoryTest : StringSpec({
 
     "finalizarCompraRemota() NO debe vaciar el DAO si la llamada al microservicio falla" {
         runTest {
-            coEvery { mockApi.clearCart() } throws Exception("Error de conexión simulado")
+            val simulatedException = Exception("Error de conexión simulado")
+
+            coEvery { mockApi.clearCart() } throws simulatedException
 
             kotlin.runCatching {
                 repo.finalizarCompraRemota(itemsFake)

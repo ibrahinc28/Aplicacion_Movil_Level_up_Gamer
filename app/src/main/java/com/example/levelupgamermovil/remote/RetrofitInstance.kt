@@ -7,7 +7,7 @@ object RetrofitInstance {
 
     val api: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://TU-IP-O-PC:8080/")
+            .baseUrl("http://192.168.1.89:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
