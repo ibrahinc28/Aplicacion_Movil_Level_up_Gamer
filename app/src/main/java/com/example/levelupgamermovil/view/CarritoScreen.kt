@@ -1,7 +1,5 @@
 package com.example.levelupgamermovil.view
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,8 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,49 +36,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.levelupgamermovil.model.ItemCarrito
 import com.example.levelupgamermovil.viewmodel.CarritoViewModel
-import com.example.levelupgamermovil.viewmodel.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarritoScreen(
     viewModel: CarritoViewModel,
-    themeViewModel: ThemeViewModel,
     onContinuarComprando: () -> Unit
 ) {
     val estado by viewModel.estado.collectAsState()
-    val esOscuro by themeViewModel.esOscuro.collectAsState(initial = false)
-    val topBarColor by animateColorAsState(
-        targetValue = MaterialTheme.colorScheme.surface,
-        animationSpec = tween(500), label = "TopBarColor"
-    )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = { Text("Carrito de Compras") },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = topBarColor),
-                actions = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(end = 8.dp)
-                    ){
-                        Text(
-                            text = if (esOscuro) "Oscuro" else "Claro",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Switch(
-                            checked = esOscuro,
-                            onCheckedChange = { themeViewModel.alternarTema() },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primary,
-                                checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-                            )
-                        )
-                    }
-                }
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
             )
         }
     ) { innerPadding ->
@@ -96,7 +65,7 @@ fun CarritoScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                "Carrito de Compras",
+                "Resumen de Compra",
                 fontFamily = FontFamily.Monospace,
                 color = Color.Green,
                 style = MaterialTheme.typography.headlineLarge,
