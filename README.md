@@ -4,14 +4,14 @@ Repositorio para desarrollar en colaboración la aplicación móvil del proyecto
 Nombre de la app: Level-Up Gamer
 
 Integrantes:
-César Maldonado
-Vania Carvajal
+César Maldonado,
+Vania Carvajal,
 Gino Fierro
 
 Funcionalidades:
-Búsqueda de productos relacionados al gaming
-Carrito de compras
-Registro de usuario e inicio de sesión
+Búsqueda de productos relacionados al gaming,
+Carrito de compras,
+Registro de usuario e inicio de sesión,
 Uso de cámara y galería en perfil de usuario
 
 Endpoints:
