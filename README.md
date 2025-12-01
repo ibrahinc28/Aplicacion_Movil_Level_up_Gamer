@@ -15,5 +15,5 @@ Registro de usuario e inicio de sesión
 Uso de cámara y galería en perfil de usuario
 
 Endpoints:
-Backend (API de backend, subida en EC2)
+Backend (API de backend, subida en EC2; cambiar link de API en RetrofitClient.kt para hacer pruebas locales)
 https://www.freetogame.com/ (API externa, muestra juegos dest             acados en página principal)
