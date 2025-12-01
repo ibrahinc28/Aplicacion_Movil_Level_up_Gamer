@@ -12,7 +12,8 @@ Funcionalidades:
 Búsqueda de productos relacionados al gaming,
 Carrito de compras,
 Registro de usuario e inicio de sesión,
-Uso de cámara y galería en perfil de usuario
+Uso de cámara y galería en perfil de usuario,
+Mostrar juegos gratis en tendencia
 
 Endpoints:
 Backend (API de backend, subida en EC2; cambiar link de API en RetrofitClient.kt para hacer pruebas locales)
