@@ -48,22 +48,40 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
             supportingText = {
                 estado.errores.nombre?.let {
                     Text(it, color = MaterialTheme.colorScheme.error)
-        }
-    },
-    modifier = Modifier.fillMaxWidth()
-    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
-            value = estado.correo,
+            value = estado.snombre,
             onValueChange = viewModel::onCorreoChange,
-            label = { Text("Correo") },
-            isError = estado.errores.correo != null,
+            label = { Text("Segundo Nombre (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = estado.apellidopat,
+            onValueChange = viewModel::onApellidoPatChange,
+            label = { Text("Apellido Paterno") },
+            isError = estado.errores.apellidopat != null,
             supportingText = {
-            estado.errores.correo?.let {
-                Text(it, color = MaterialTheme.colorScheme.error)
-        }
-    },
-        modifier = Modifier.fillMaxWidth()
-)
+                estado.errores.apellidopat?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = estado.apellidomat,
+            onValueChange = viewModel::onApellidoMatChange,
+            label = { Text("Apellido Materno") },
+            isError = estado.errores.apellidomat != null,
+            supportingText = {
+                estado.errores.apellidomat?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
             value = estado.clave,
             onValueChange = viewModel::onClaveChange,
@@ -75,20 +93,20 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-        modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
-    OutlinedTextField(
-        value = estado.direccion,
-        onValueChange = viewModel::onDireccionChange,
-        label = { Text("Dirección") },
-        isError = estado.errores.direccion != null,
-        supportingText = {
-            estado.errores.direccion?.let {
-                Text(it, color = MaterialTheme.colorScheme.error)
-            }
-        },
-    modifier = Modifier.fillMaxWidth()
-)
+        OutlinedTextField(
+            value = estado.correo,
+            onValueChange = viewModel::onCorreoChange,
+            label = { Text("Correo") },
+            isError = estado.errores.correo != null,
+            supportingText = {
+                estado.errores.correo?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = estado.aceptaTerminos,
@@ -98,15 +116,15 @@ fun userSignupScreen(navController : NavController, viewModel: RegistroViewModel
             Text("Acepto los términos y condiciones")
         }
         Button(
-onClick = {
-    if (viewModel.validarFormulario()) {
-        navController.navigate("ResumenScreen")
-    }
-},
-modifier = Modifier.fillMaxWidth()
-) {
-    Text("Registrar")
-}
+            onClick = {
+                if (viewModel.validarFormulario()) {
+                    navController.navigate("ResumenScreen")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Registrar")
+        }
         Button(
             onClick = {navController.popBackStack()},
             colors = ButtonDefaults.buttonColors(
